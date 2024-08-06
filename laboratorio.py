@@ -181,3 +181,11 @@ class Gestion_Productos:
         else:
             ids = [int(id) for id in self.productos.keys()]
             return max(ids) + 1
+        
+   
+    def buscar_producto_por_nombre(self, nombre):
+        resultados = []
+        for producto in self.productos.values():
+            if producto["nombre"].lower() == nombre.lower():
+                resultados.append(producto)
+        return resultados
