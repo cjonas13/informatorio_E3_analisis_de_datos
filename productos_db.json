@@ -1,0 +1,23 @@
+{
+    "1": {
+        "id": 1,
+        "nombre": "auricular",
+        "precio": 900.0,
+        "cantidad_stock": 2,
+        "Garantia": 12
+    },
+    "2": {
+        "id": 2,
+        "nombre": "buzo",
+        "precio": 5.0,
+        "cantidad_stock": 982,
+        "Categoria": "invierno"
+    },
+    "3": {
+        "id": 3,
+        "nombre": "camiseta",
+        "precio": 5.0,
+        "cantidad_stock": 999999,
+        "Categoria": "invierno"
+    }
+}
