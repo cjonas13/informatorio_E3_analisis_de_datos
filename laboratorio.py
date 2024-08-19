@@ -1,6 +1,6 @@
 import json
 '''
-
+---RECUPERATORIO----
 
 Desafío 1: Sistema de Gestión de Productos
 Objetivo: Desarrollar un sistema para manejar productos en un inventario.
@@ -14,7 +14,7 @@ Requisitos:
 -Persistir los datos en archivo JSON.
 '''
 #----------------------------definición de clase base-----------------------------#
-class Productos:
+class productos:
     def __init__ (self, id, nombre, precio, cantidad_stock):
         self.__id = id
         self.__nombre = nombre
@@ -36,7 +36,7 @@ class Productos:
     def cantidad_stock (self):
         return self.__cantidad_stock
     
-#-------------------------------------------------------------------------------
+
 #-----control de datos -----#
     @id.setter
     def id(self, nuevo_id):
@@ -50,10 +50,10 @@ class Productos:
         try:
             cantidad_stock = int (stock)
             if cantidad_stock < 0:
-                raise ValueError ("la cantidad stock debe ser un número positivo")
+                raise ValueError ("la cantidad stock debe ser un número positivo  \n")
             return cantidad_stock
         except ValueError:
-            raise ValueError("la cantidad debe ser un número valido mayor a cero")
+            raise ValueError("la cantidad debe ser un número valido mayor a cero \n")
     
     @precio.setter
     def precio (self, nuevo_precio):
@@ -63,10 +63,10 @@ class Productos:
         try:
             valor_producto = float (valor)
             if valor_producto < 0:
-                raise ValueError ("el valor debe ser un número positivo")
+                raise ValueError ("el valor debe ser un número positivo \n")
             return valor_producto
         except ValueError:
-            raise ValueError("el valor debe ser un número valido mayor a cero")
+            raise ValueError("el valor debe ser un número valido mayor a cero \n")
             
 #------crea diccionario para guarda en json-------------------#
     def to_dict(self):
@@ -81,7 +81,7 @@ class Productos:
         return f"{self.__id}{self.__nombre} {self.__precio} {self.__cantidad_stock}"
         
 #---------subclases------------------------#
-class Producto_Electronicos (Productos):
+class producto_electronicos (productos):
     def __init__(self, id, nombre, precio, cantidad_stock, garantia):
         super().__init__(id, nombre, precio, cantidad_stock)
         self.__garantia = self.validar_garantia (garantia)
@@ -94,10 +94,10 @@ class Producto_Electronicos (Productos):
         try:
             cantidad_garantia = int (meses)
             if cantidad_garantia < 0:
-                raise ValueError ("la cantidad debe ser un número positivo")
+                raise ValueError ("la cantidad debe ser un número positivo \n")
             return cantidad_garantia
         except ValueError:
-            raise ValueError("la cantidad debe ser un número valido mayor a cero")
+            raise ValueError("la cantidad debe ser un número valido mayor a cero \n")
         
     @garantia.setter
     def garantia (self, nueva_garantia):
@@ -112,7 +112,7 @@ class Producto_Electronicos (Productos):
         return f"{super().__str__()} - Garantia: {self.__garantia}"
     
    
-class Producto_Vestimenta (Productos):
+class producto_vestimenta (productos):
     def __init__(self, id, nombre, precio, cantidad_stock, categoria):
         super().__init__(id, nombre, precio, cantidad_stock)
         self.__categoria = categoria
@@ -173,7 +173,7 @@ class Gestion_Productos:
             self.guardar_datos()
             print(f"Producto {producto.nombre} creado correctamente con ID {id}.")
         except Exception as error:
-            print(f'Error inesperado al crear colaborador/producto: {error}')
+            print(f'Error inesperado al crear producto: {error}')
 
     def obtener_nuevo_id(self):
         if not self.productos:
@@ -186,6 +186,41 @@ class Gestion_Productos:
     def buscar_producto_por_nombre(self, nombre):
         resultados = []
         for producto in self.productos.values():
-            if producto["nombre"].lower() == nombre.lower():
-                resultados.append(producto)
+           if producto["nombre"].lower() == nombre.lower():
+            resultados.append(producto)
         return resultados
+        
+    def eliminar_producto (self,id):
+        try:
+            id_str = str(id)
+            datos = self.leer_datos()
+            nombre_producto = datos[id_str]['nombre']
+            
+            if id_str in self.productos:
+                
+                del self.productos[id_str]
+                
+                
+                self.guardar_datos()
+                print(f"El producto '{nombre_producto}'con ID '{id_str}' fue eliminado correctamente.")
+                
+                
+            else:
+                print(f"No se encontró ningún producto con ID '{id}_str'.")
+        except Exception as error:
+            print(f'Error inesperado al eliminar el producto producto: {error}')
+    
+    def modificar_stock(self, id, nuevo_stock):
+        try:
+            #datos = self.leer_datos()
+            id_str = str(id)
+            
+
+            if id_str in self.productos:
+                 self.productos[id_str]['cantidad_stock'] = nuevo_stock  # Actualizamos el stock
+                 self.guardar_datos()
+                 print(f'Stock actualizado para el producto :{id}')
+            else:
+                print(f"No se encontró ningún producto con ID '{id}'.")
+        except Exception as e:
+            print(f'Error inesperado al eliminar el producto producto: {e}')
