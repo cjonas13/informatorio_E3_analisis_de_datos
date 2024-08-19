@@ -2,8 +2,8 @@ import os
 import platform
 
 from laboratorio import (
-    Producto_Electronicos,
-    Producto_Vestimenta,
+    producto_electronicos,
+    producto_vestimenta,
     Gestion_Productos,
 )
 
@@ -19,9 +19,11 @@ def mostrar_menu():
     print('1. Agregar Producto Electronico')
     print('2. Agregar Producto Vestimenta')
     print('3. Buscar Producto por Nombre')
+    print('4. Eliminar Producto por ID')
+    print('5. Moficiar cantidad de stock')
     
     
-def agregar_producto (gestion_productos, tipo_producto):
+def agregar_producto (Gestion_Productos, tipo_producto):
   
     try:
         nombre = input('Ingrese nombre del producto: ')
@@ -30,15 +32,15 @@ def agregar_producto (gestion_productos, tipo_producto):
 
         if tipo_producto == '1':
             garantia = int(input('Ingrese garantia en cantidad de meses: '))
-            producto = Producto_Electronicos(None, nombre, precio, cantidad_stock, garantia)
+            producto = producto_electronicos(None, nombre, precio, cantidad_stock, garantia)
         elif tipo_producto == '2':
             categoria = input('Ingrese categoria de la vestimenta: ')
-            producto = Producto_Vestimenta(None, nombre, cantidad_stock, precio, categoria)
+            producto = producto_vestimenta(None, nombre, precio, cantidad_stock, categoria)
         else:
             print('Opción inválida')
             return
 
-        gestion_productos.crear_producto(producto)
+        Gestion_Productos.crear_producto(producto)
         input('Presione enter para continuar ...')
 
     except ValueError as e:
@@ -47,22 +49,31 @@ def agregar_producto (gestion_productos, tipo_producto):
         print(f'Error inesperado: {e}') 
 
 def encontrar_producto(nombre):
-    #3nombre = input('Ingrese el nombre del producto a buscar: ')
-    resultados = gestion_productos.buscar_producto_por_nombre(nombre)
+    
+    resultados = Gestion_Productos.buscar_producto_por_nombre(nombre)
     if resultados:
         print("Productos encontrados:")
         for producto in resultados:
             print(producto)
     else:
         print("No se encontraron productos con ese nombre.")
-    input('Presione enter para continuar ya encontre 1 vez...')
+    input('Presione enter para continuar...')
     
+def borrar_producto (Gestion_Productos):   
+    id_producto = input('Ingrese el ID del producto a eliminar: ')
+    Gestion_Productos.eliminar_producto(id_producto)
+    input('Presione enter para continuar...')
+
+def modificar_cantidad_stock (Gestion_Productos):   
+    id_producto = input('Ingrese el ID del producto a modificar: ')
+    nuevo_stock = input ('Ingrese el nuevo Stock')
+    Gestion_Productos.modificar_stock(id_producto, nuevo_stock)
+    input('Presione enter para continuar...')
     
 if __name__ == "__main__":
-    archivo_productos = 'productos_db.json'
-    gestion_productos = Gestion_Productos(archivo_productos)
+    archivo_productos = 'productos_db.json' 
+    Gestion_Productos = Gestion_Productos(archivo_productos)
 
-    
         
     while True:
         limpiar_pantalla()
@@ -70,10 +81,23 @@ if __name__ == "__main__":
         opcion = input('Seleccione una opción: ')
 
         if opcion == '1' or opcion == '2':
-            agregar_producto(gestion_productos, opcion)
+            agregar_producto(Gestion_Productos, opcion)
+        
         elif opcion == '3':  
             nombre = input('Ingrese el nombre del producto a buscar: ')
             resultados = encontrar_producto(nombre)
+        
+        elif opcion == '4':    
+            
+            #id_producto = input('Ingrese el ID del producto a eliminar: ')
+            borrar_producto (Gestion_Productos)
+            input('Presione enter para continuar...')
+        elif opcion == '5':    
+            
+            #id_producto = input('Ingrese el ID del producto a eliminar: ')
+            modificar_cantidad_stock(Gestion_Productos)
+            input('Presione enter para continuar...')
+            
         elif opcion == '7':
             print('Saliendo del programa...')
             break
